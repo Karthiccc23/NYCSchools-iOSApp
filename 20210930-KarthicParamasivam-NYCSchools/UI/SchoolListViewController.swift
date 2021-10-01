@@ -34,6 +34,7 @@ class SchoolListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = viewModel.getScreenTitle()
+        viewModel.fetchSchools()
         setUpUI()
     }
     

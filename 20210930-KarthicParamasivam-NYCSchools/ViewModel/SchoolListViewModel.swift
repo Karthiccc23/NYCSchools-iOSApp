@@ -12,18 +12,31 @@ class SchoolListViewModel {
     
     private let title = "NYC Schools"
     
-    private var coordinator: SchoolListCoordinator
+    private let coordinator: SchoolListCoordinator
     
-    init(coordinator: SchoolListCoordinator) {
+    private let schoolApiService: SchoolApiServiceProtocol
+    
+    private var schools: [School] = [School]()
+    
+    init(coordinator: SchoolListCoordinator, schoolApiService: SchoolApiServiceProtocol = SchoolApiService()) {
         self.coordinator = coordinator
+        self.schoolApiService = schoolApiService
     }
     
     func showSchoolDetails(for school: String) {
         print("school \(school)")
-        coordinator.showSchoolDetails()
+        coordinator.showSchoolDetails(for: school)
     }
     
     func getScreenTitle() -> String {
         return title
+    }
+    
+    func fetchSchools() {
+        schoolApiService.fetchSchools() { (success, response, error) in
+            print(success)
+            print(response)
+            print(error)
+        }
     }
 }

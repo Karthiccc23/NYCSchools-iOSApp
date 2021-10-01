@@ -11,10 +11,14 @@ class SchoolDetailsViewModel {
     
     private let title = "School Details"
     
+    private var school: String?
+    
     private var coordinator: SchoolDetailsCoordinator
     
-    init(coordinator: SchoolDetailsCoordinator) {
+    init(coordinator: SchoolDetailsCoordinator, school: String) {
         self.coordinator = coordinator
+        self.school = school
+        print("DETAILSVIEwMODEL = \(school)")
     }
     
     func getScreenTitle() -> String {

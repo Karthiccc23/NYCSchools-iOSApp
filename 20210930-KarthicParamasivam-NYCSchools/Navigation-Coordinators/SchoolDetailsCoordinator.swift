@@ -15,12 +15,15 @@ final class SchoolDetailsCoordinator: Coordinator {
     
     private let navigationController: UINavigationController
     
-    init(navigationController: UINavigationController) {
+    private let school: String
+    
+    init(navigationController: UINavigationController, school: String) {
         self.navigationController = navigationController
+        self.school = school
     }
     
     func start() {
-        let schoolDetailsViewModel = SchoolDetailsViewModel(coordinator: self)
+        let schoolDetailsViewModel = SchoolDetailsViewModel(coordinator: self, school: self.school)
         let schoolDetailsViewController = SchoolDetailsViewController(viewModel: schoolDetailsViewModel)
         navigationController.present(schoolDetailsViewController, animated: true, completion: nil)
     }
