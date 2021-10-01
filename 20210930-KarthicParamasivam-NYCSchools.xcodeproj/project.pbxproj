@@ -17,6 +17,10 @@
 		277CCEE02706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEDF2706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsTests.swift */; };
 		277CCEEA2706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEE92706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITests.swift */; };
 		277CCEEC2706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEEB2706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITestsLaunchTests.swift */; };
+		277CCEFA2706DE8B00E6432E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEF92706DE8B00E6432E /* AppCoordinator.swift */; };
+		277CCEFC2706E24500E6432E /* SchoolListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEFB2706E24500E6432E /* SchoolListCoordinator.swift */; };
+		277CCEFF2706E2C700E6432E /* SchoolListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEFE2706E2C600E6432E /* SchoolListViewController.swift */; };
+		277CCF012706E38C00E6432E /* SchoolDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCF002706E38C00E6432E /* SchoolDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +55,10 @@
 		277CCEE52706D81300E6432E /* 20210930-KarthicParamasivam-NYCSchoolsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "20210930-KarthicParamasivam-NYCSchoolsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		277CCEE92706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _0210930_KarthicParamasivam_NYCSchoolsUITests.swift; sourceTree = "<group>"; };
 		277CCEEB2706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _0210930_KarthicParamasivam_NYCSchoolsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		277CCEF92706DE8B00E6432E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		277CCEFB2706E24500E6432E /* SchoolListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListCoordinator.swift; sourceTree = "<group>"; };
+		277CCEFE2706E2C600E6432E /* SchoolListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListViewController.swift; sourceTree = "<group>"; };
+		277CCF002706E38C00E6432E /* SchoolDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +109,9 @@
 		277CCEC42706D80900E6432E /* 20210930-KarthicParamasivam-NYCSchools */ = {
 			isa = PBXGroup;
 			children = (
+				277CCF022706E39100E6432E /* ViewModel */,
+				277CCEFD2706E2AB00E6432E /* UI */,
+				277CCEF82706DE7800E6432E /* Navigation */,
 				277CCEC52706D80900E6432E /* AppDelegate.swift */,
 				277CCEC72706D80900E6432E /* SceneDelegate.swift */,
 				277CCEC92706D80900E6432E /* ViewController.swift */,
@@ -128,6 +139,31 @@
 				277CCEEB2706D81300E6432E /* _0210930_KarthicParamasivam_NYCSchoolsUITestsLaunchTests.swift */,
 			);
 			path = "20210930-KarthicParamasivam-NYCSchoolsUITests";
+			sourceTree = "<group>";
+		};
+		277CCEF82706DE7800E6432E /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				277CCEF92706DE8B00E6432E /* AppCoordinator.swift */,
+				277CCEFB2706E24500E6432E /* SchoolListCoordinator.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		277CCEFD2706E2AB00E6432E /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				277CCEFE2706E2C600E6432E /* SchoolListViewController.swift */,
+				277CCF002706E38C00E6432E /* SchoolDetailViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		277CCF022706E39100E6432E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,9 +297,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				277CCEFF2706E2C700E6432E /* SchoolListViewController.swift in Sources */,
 				277CCED02706D80900E6432E /* _0210930_KarthicParamasivam_NYCSchools.xcdatamodeld in Sources */,
+				277CCF012706E38C00E6432E /* SchoolDetailViewController.swift in Sources */,
 				277CCECA2706D80900E6432E /* ViewController.swift in Sources */,
+				277CCEFA2706DE8B00E6432E /* AppCoordinator.swift in Sources */,
 				277CCEC62706D80900E6432E /* AppDelegate.swift in Sources */,
+				277CCEFC2706E24500E6432E /* SchoolListCoordinator.swift in Sources */,
 				277CCEC82706D80900E6432E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
