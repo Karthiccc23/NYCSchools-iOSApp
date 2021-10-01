@@ -22,7 +22,7 @@ class SchoolApiService: SchoolApiServiceProtocol{
     
     private var url: URL? {
         get {
-            return URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json?$limit=2&$offset=0&$order=school_name")
+            return URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json?$limit=5&$offset=0&$order=school_name")
         }
     }
     
@@ -50,7 +50,6 @@ class SchoolApiService: SchoolApiServiceProtocol{
             if let response = response, !response.isEmpty {
                 completion(true,response, nil)
             }
-            completion(true,[], nil)
         }.resume()
     }
 }

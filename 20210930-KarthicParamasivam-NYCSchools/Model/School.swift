@@ -15,6 +15,7 @@ struct School: Codable {
     let location: String
     let totalStudents: String
     let summary: String
+    let phoneNumber: String
     
     enum CodingKeys: String, CodingKey {
         case dbn
@@ -23,6 +24,7 @@ struct School: Codable {
         case location
         case totalStudents = "total_students"
         case summary = "overview_paragraph"
+        case phoneNumber = "phone_number"
     }
     
     init(from decoder: Decoder) throws {
@@ -33,5 +35,6 @@ struct School: Codable {
         location = try values.decode(String.self, forKey: .location)
         totalStudents = try values.decode(String.self, forKey: .totalStudents)
         summary = try values.decode(String.self, forKey: .summary)
+        phoneNumber = try values.decode(String.self, forKey: .phoneNumber)
     }
 }

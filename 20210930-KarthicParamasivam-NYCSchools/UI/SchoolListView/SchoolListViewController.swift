@@ -16,7 +16,7 @@ class SchoolListViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SchoolListCell.self, forCellReuseIdentifier: "cell1")
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
@@ -33,9 +33,12 @@ class SchoolListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.title = viewModel.getScreenTitle()
-        viewModel.fetchSchools()
+        
         setUpUI()
+        
+        loadSchools()
     }
     
     func setUpUI() {
@@ -51,20 +54,30 @@ class SchoolListViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
+    
+    func loadSchools() {
+        viewModel.fetchSchools() { [weak self] completion in
+            if completion {
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+    }
 }
 
 extension SchoolListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        4
+        return viewModel.schools.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "CREATED"
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.showSchoolDetails(for: "\(indexPath.row)")
+        guard !viewModel.schools.isEmpty else { return UITableViewCell() }
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as? SchoolListCell {
+            let school = viewModel.schools[indexPath.row]
+            cell.school = school
+            return cell
+        }
+        return UITableViewCell()
     }
 }
