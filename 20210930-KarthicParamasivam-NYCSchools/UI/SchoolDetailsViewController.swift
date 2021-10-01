@@ -1,5 +1,5 @@
 //
-//  SchoolDetailViewController.swift
+//  SchoolDetailsViewController.swift
 //  20210930-KarthicParamasivam-NYCSchools
 //
 //  Created by Karthic Paramasivam on 10/1/21.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SchoolDetailViewController: UIViewController {
+class SchoolDetailsViewController: UIViewController {
     var viewModel: SchoolDetailsViewModel
     
     init(viewModel: SchoolDetailsViewModel) {
