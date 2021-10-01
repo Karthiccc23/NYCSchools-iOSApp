@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol Coordinator {
-    var childCoordinators   : [Coordinator] { get }
+    var childCoordinators : [Coordinator] { get }
     func start()
 }
 
@@ -23,8 +23,14 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let viewController = ViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
+        let navigationController = UINavigationController()
+        
+        let schoolListCoordinator = SchoolListCoordinator(navigationController: navigationController)
+        
+        childCoordinators.append(schoolListCoordinator)
+        
+        schoolListCoordinator.start()
+        
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }

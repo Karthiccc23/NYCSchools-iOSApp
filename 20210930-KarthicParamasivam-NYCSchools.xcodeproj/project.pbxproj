@@ -21,7 +21,7 @@
 		277CCEFC2706E24500E6432E /* SchoolListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEFB2706E24500E6432E /* SchoolListCoordinator.swift */; };
 		277CCEFF2706E2C700E6432E /* SchoolListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCEFE2706E2C600E6432E /* SchoolListViewController.swift */; };
 		277CCF012706E38C00E6432E /* SchoolDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCF002706E38C00E6432E /* SchoolDetailViewController.swift */; };
-		277CCF042706EB5600E6432E /* SchoolListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCF032706EB5600E6432E /* SchoolListViewModel.swift */; };
+		277CCF042706EB5600E6432E /* SchoolListVIewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCF032706EB5600E6432E /* SchoolListVIewModel.swift */; };
 		277CCF062706EE7B00E6432E /* SchoolDetailsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCF052706EE7B00E6432E /* SchoolDetailsCoordinator.swift */; };
 		277CCF082706EFF400E6432E /* SchoolDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277CCF072706EFF400E6432E /* SchoolDetailsViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -62,7 +62,7 @@
 		277CCEFB2706E24500E6432E /* SchoolListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListCoordinator.swift; sourceTree = "<group>"; };
 		277CCEFE2706E2C600E6432E /* SchoolListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListViewController.swift; sourceTree = "<group>"; };
 		277CCF002706E38C00E6432E /* SchoolDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetailViewController.swift; sourceTree = "<group>"; };
-		277CCF032706EB5600E6432E /* SchoolListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListViewModel.swift; sourceTree = "<group>"; };
+		277CCF032706EB5600E6432E /* SchoolListVIewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListVIewModel.swift; sourceTree = "<group>"; };
 		277CCF052706EE7B00E6432E /* SchoolDetailsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetailsCoordinator.swift; sourceTree = "<group>"; };
 		277CCF072706EFF400E6432E /* SchoolDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetailsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,7 +169,7 @@
 		277CCF022706E39100E6432E /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				277CCF032706EB5600E6432E /* SchoolListViewModel.swift */,
+				277CCF032706EB5600E6432E /* SchoolListVIewModel.swift */,
 				277CCF072706EFF400E6432E /* SchoolDetailsViewModel.swift */,
 			);
 			path = ViewModel;
@@ -309,7 +309,7 @@
 				277CCEFF2706E2C700E6432E /* SchoolListViewController.swift in Sources */,
 				277CCED02706D80900E6432E /* _0210930_KarthicParamasivam_NYCSchools.xcdatamodeld in Sources */,
 				277CCF012706E38C00E6432E /* SchoolDetailViewController.swift in Sources */,
-				277CCF042706EB5600E6432E /* SchoolListViewModel.swift in Sources */,
+				277CCF042706EB5600E6432E /* SchoolListVIewModel.swift in Sources */,
 				277CCECA2706D80900E6432E /* ViewController.swift in Sources */,
 				277CCEFA2706DE8B00E6432E /* AppCoordinator.swift in Sources */,
 				277CCEC62706D80900E6432E /* AppDelegate.swift in Sources */,
