@@ -29,7 +29,7 @@ class SchoolApiService: SchoolApiServiceProtocol{
     }()
     
     func fetchSchools(completion: @escaping (Bool, [School], Error?) -> ()) {
-        guard let url = createURLFromParameters(parameters: ["$limit": "10","$offset":"0","$order":"school_name"], pathparam: "s3k6-pzi2.json") else {
+        guard let url = createURLFromParameters(parameters: ["$limit": "15","$offset":"0","$order":"school_name"], pathparam: "s3k6-pzi2.json") else {
             completion(false,[], apiError(errorId: 401, description: "Invalid Url", errorKind: .invalidUrl))
             return
         }
@@ -52,6 +52,8 @@ class SchoolApiService: SchoolApiServiceProtocol{
             
             if let response = response, !response.isEmpty {
                 completion(true,response, nil)
+            } else {
+                completion(true,[], nil)
             }
         }.resume()
     }
@@ -73,14 +75,16 @@ class SchoolApiService: SchoolApiServiceProtocol{
             }
             
             guard let data = data else {
-                completion(true,[], nil)
+                completion(true, [], nil)
                 return
             }
             
             let response = try? JSONDecoder().decode([SchoolDetails].self, from: data)
             
-            if let response = response {
+            if let response = response, !response.isEmpty {
                 completion(true,response, nil)
+            } else {
+                completion(true, [], nil)
             }
         }.resume()
     }
@@ -113,6 +117,7 @@ struct apiError: Error {
     enum ErrorKind {
         case invalidUrl
         case serverError
+        case noDataFound
     }
     let errorId: Int
     let description: String?

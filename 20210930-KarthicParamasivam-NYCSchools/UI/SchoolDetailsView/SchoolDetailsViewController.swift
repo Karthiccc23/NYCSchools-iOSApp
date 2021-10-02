@@ -18,7 +18,7 @@ class SchoolDetailsViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Not Available"
         label.font = UIFont.systemFont(ofSize: 20, weight: .light)
-        label.numberOfLines = 2
+        label.numberOfLines = 5
         return label
     }()
     
@@ -76,6 +76,18 @@ class SchoolDetailsViewController: UIViewController {
         return stackView
     }()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let mainView: UIView = {
+        let mainView = UIView()
+        mainView.translatesAutoresizingMaskIntoConstraints = false
+        return mainView
+    }()
+    
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -113,8 +125,10 @@ class SchoolDetailsViewController: UIViewController {
     
     
     func setUpUI() {
-        view.addSubview(mainStackView)
+        view.addSubview(scrollView)
         view.addSubview(activityIndicator)
+        scrollView.addSubview(mainView)
+        mainView.addSubview(mainStackView)
                 
         for i in 0..<viewModel.schoolDetailTitles.count {
             let stackView = createStackView()
@@ -129,15 +143,19 @@ class SchoolDetailsViewController: UIViewController {
     
     func loadSchoolDetails() {
         activityIndicator.startAnimating()
-        viewModel.fetchSchoolDetails() { [weak self] completion in
-            guard let self = self else { return }
-            let schoolDetails = self.viewModel.schoolDetails
-            guard !schoolDetails.isEmpty else { return }
-
-            if completion {
+        viewModel.fetchSchoolDetails() { [weak self] (completion, error) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
                 self.activityIndicator.stopAnimating()
-                for schoolDetail in schoolDetails {
-                    DispatchQueue.main.async {
+                let schoolDetails = self.viewModel.schoolDetails
+                guard error == nil, !schoolDetails.isEmpty
+                else {
+                    self.showAlert(error?.localizedDescription ?? "Cannot Connect to Server")
+                    return
+                }
+                
+                if completion {
+                    for schoolDetail in schoolDetails {
                         self.name.text = schoolDetail.name
                         self.summary.text = self.viewModel.getSchoolSummary()
                         self.numOfTestTakers.text = schoolDetail.numOfTestTakers
@@ -171,12 +189,25 @@ class SchoolDetailsViewController: UIViewController {
     
     func addConstraints() {
         NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 5),
-            mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 5),
-            mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
-            mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mainStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            mainStackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            mainStackView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+            mainStackView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
+    }
+    
+    func showAlert(_ errorMessage: String) {
+    
+        let alert = UIAlertController(title: "ERROR MESSAGE", message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
+        self.present(alert, animated: true)
     }
 }

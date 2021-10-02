@@ -151,7 +151,6 @@ class SchoolListCell: UITableViewCell {
     
     @objc
     func tapSchoolLink(_ gesture: UITapGestureRecognizer) {
-        print("school link tapped")
         guard let label = gesture.view as? UILabel, let websiteLink = label.text else { return }
         if let url = URL(string: "https://\(websiteLink)") {
             UIApplication.shared.open(url)

@@ -31,14 +31,20 @@ class SchoolListViewModel {
         return title
     }
     
-    func fetchSchools(completion: @escaping (_ success: Bool)->()) {
+    func fetchSchools(completion: @escaping (_ success: Bool,_ error: Error?)->()) {
         schoolApiService.fetchSchools() { (success, response, error) in
+            if let error = error {
+                completion(false,error)
+            }
+            
             if success {
-                print(response)
                 self.schools = response
-                completion(success)
-            } else {
-                completion(success)
+                
+                if !response.isEmpty {
+                    completion(success,nil)
+                } else {
+                    completion(success,apiError(errorId: 502, description: "No Data Found", errorKind: .noDataFound))
+                }
             }
         }
     }

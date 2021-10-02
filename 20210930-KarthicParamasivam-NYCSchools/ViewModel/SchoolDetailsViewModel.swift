@@ -36,18 +36,21 @@ class SchoolDetailsViewModel {
         return school.summary
     }
     
-    func fetchSchoolDetails(completion: @escaping (_ success: Bool)->()) {
+    func fetchSchoolDetails(completion: @escaping (_ success: Bool,_ error: Error?)->()) {
         guard let school = school
         else {
-            return completion(false)
+            return completion(false,apiError(errorId: 501, description: "Server not found", errorKind: .serverError))
         }
         schoolApiService.fetchSchoolDetails(schoolId: school.dbn) { (success, response, error) in
-            if success {
-                print(response)
+            if let error = error {
+                completion(false,error)
+            }
+            
+            if !response.isEmpty {
                 self.schoolDetails = response
-                completion(success)
+                completion(success,nil)
             } else {
-                completion(success)
+                completion(success,apiError(errorId: 502, description: "No Data Found", errorKind: .noDataFound))
             }
         }
     }

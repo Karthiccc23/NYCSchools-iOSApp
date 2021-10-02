@@ -75,15 +75,29 @@ class SchoolListViewController: UIViewController {
     
     func loadSchools() {
         activityIndicator.startAnimating()
-        viewModel.fetchSchools() { [weak self] completion in
-            if completion {
-                DispatchQueue.main.async { [weak self] in
+        viewModel.fetchSchools() { [weak self] (completion, error) in
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicator.stopAnimating()
+                guard error == nil
+                else {
+                    self?.showAlert(error?.localizedDescription ?? "Cannot Connect to Server")
+                    return
+                }
+                
+                if completion {
                     guard let self = self else { return }
-                    self.activityIndicator.stopAnimating()
                     self.tableView.reloadData()
                 }
             }
         }
+    }
+    
+    func showAlert(_ errorMessage: String) {
+    
+        let alert = UIAlertController(title: "ERROR MESSAGE", message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
+        self.present(alert, animated: true)
     }
 }
 
@@ -93,10 +107,14 @@ extension SchoolListViewController: UITableViewDelegate, UITableViewDataSource {
         let listCount = viewModel.schools.count
         
         if !NetworkMonitor.shared.isInternetOn {
-            self.tableView.setEmptyMessage("Please Check Internet Connection")
+            let connnectionMsg = "Please Check Internet Connection"
+            self.showAlert(connnectionMsg)
+            self.tableView.setEmptyMessage(connnectionMsg)
         } else if listCount == 0 {
             self.tableView.setEmptyMessage("No Schools Found")
         }
+        self.tableView.separatorColor = .red
+        self.tableView.separatorStyle = .singleLine
         return listCount
     }
     
@@ -134,7 +152,7 @@ extension UITableView {
         messageLabel.textColor = .black
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
-        messageLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        messageLabel.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         messageLabel.sizeToFit()
 
         self.backgroundView = messageLabel
