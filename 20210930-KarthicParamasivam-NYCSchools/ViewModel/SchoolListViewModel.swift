@@ -16,15 +16,14 @@ class SchoolListViewModel {
     
     private let schoolApiService: SchoolApiServiceProtocol
     
-    private var schools: [School] = [School]()
+    var schools: [School] = [School]()
     
     init(coordinator: SchoolListCoordinator, schoolApiService: SchoolApiServiceProtocol = SchoolApiService()) {
         self.coordinator = coordinator
         self.schoolApiService = schoolApiService
     }
     
-    func showSchoolDetails(for school: String) {
-        print("school \(school)")
+    func showSchoolDetails(for school: School) {
         coordinator.showSchoolDetails(for: school)
     }
     
@@ -32,11 +31,15 @@ class SchoolListViewModel {
         return title
     }
     
-    func fetchSchools() {
+    func fetchSchools(completion: @escaping (_ success: Bool)->()) {
         schoolApiService.fetchSchools() { (success, response, error) in
-            print(success)
-            print(response)
-            print(error)
+            if success {
+                print(response)
+                self.schools = response
+                completion(success)
+            } else {
+                completion(success)
+            }
         }
     }
 }

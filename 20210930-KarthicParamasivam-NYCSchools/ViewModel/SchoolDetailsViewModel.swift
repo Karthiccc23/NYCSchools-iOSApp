@@ -11,17 +11,44 @@ class SchoolDetailsViewModel {
     
     private let title = "School Details"
     
-    private var school: String?
+    private var school: School?
+    
+    var schoolDetails: [SchoolDetails] = [SchoolDetails]()
     
     private var coordinator: SchoolDetailsCoordinator
     
-    init(coordinator: SchoolDetailsCoordinator, school: String) {
+    private let schoolApiService: SchoolApiServiceProtocol
+
+    let schoolDetailTitles = ["NAME","SUMMARY", "TEST TAKERS NO","SAT AVERAGE READING SCORE", "SAT AVERAGE MATH SCORE", "SAT AVERAGE WRITING SCORE"]
+    
+    init(coordinator: SchoolDetailsCoordinator,schoolApiService: SchoolApiServiceProtocol = SchoolApiService(), school: School) {
         self.coordinator = coordinator
         self.school = school
-        print("DETAILSVIEwMODEL = \(school)")
+        self.schoolApiService = schoolApiService
     }
     
     func getScreenTitle() -> String {
         return title
+    }
+    
+    func getSchoolSummary() -> String {
+        guard let school = school else { return "Not Available"}
+        return school.summary
+    }
+    
+    func fetchSchoolDetails(completion: @escaping (_ success: Bool)->()) {
+        guard let school = school
+        else {
+            return completion(false)
+        }
+        schoolApiService.fetchSchoolDetails(schoolId: school.dbn) { (success, response, error) in
+            if success {
+                print(response)
+                self.schoolDetails = response
+                completion(success)
+            } else {
+                completion(success)
+            }
+        }
     }
 }

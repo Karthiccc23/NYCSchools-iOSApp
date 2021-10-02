@@ -15,9 +15,9 @@ final class SchoolDetailsCoordinator: Coordinator {
     
     private let navigationController: UINavigationController
     
-    private let school: String
+    private let school: School
     
-    init(navigationController: UINavigationController, school: String) {
+    init(navigationController: UINavigationController, school: School) {
         self.navigationController = navigationController
         self.school = school
     }

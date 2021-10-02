@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Network
 
 
 class SchoolListViewController: UIViewController {
@@ -20,6 +21,18 @@ class SchoolListViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
+    }()
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.style = .large
+        activityIndicator.layer.cornerRadius = 10
+        let transform: CGAffineTransform = CGAffineTransform(scaleX: 3.5, y: 3.5)
+        activityIndicator.transform = transform
+        activityIndicator.layer.borderColor = UIColor.black.cgColor
+        activityIndicator.backgroundColor = UIColor.white
+        return activityIndicator
     }()
     
     init(viewModel: SchoolListViewModel) {
@@ -36,6 +49,8 @@ class SchoolListViewController: UIViewController {
 
         self.title = viewModel.getScreenTitle()
         
+        NetworkMonitor.shared.connectionObserver = self
+        
         setUpUI()
         
         loadSchools()
@@ -43,6 +58,7 @@ class SchoolListViewController: UIViewController {
     
     func setUpUI() {
         view.addSubview(tableView)
+        view.addSubview(activityIndicator)
         addConstraints()
     }
     
@@ -52,14 +68,19 @@ class SchoolListViewController: UIViewController {
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
     
     func loadSchools() {
+        activityIndicator.startAnimating()
         viewModel.fetchSchools() { [weak self] completion in
             if completion {
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.activityIndicator.stopAnimating()
+                    self.tableView.reloadData()
                 }
             }
         }
@@ -67,8 +88,16 @@ class SchoolListViewController: UIViewController {
 }
 
 extension SchoolListViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.schools.count
+        let listCount = viewModel.schools.count
+        
+        if !NetworkMonitor.shared.isInternetOn {
+            self.tableView.setEmptyMessage("Please Check Internet Connection")
+        } else if listCount == 0 {
+            self.tableView.setEmptyMessage("No Schools Found")
+        }
+        return listCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -80,4 +109,36 @@ extension SchoolListViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return UITableViewCell()
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard !viewModel.schools.isEmpty else { return }
+        let school = viewModel.schools[indexPath.row]
+        viewModel.showSchoolDetails(for: school)
+    }
 }
+
+extension SchoolListViewController: ConnectionObserver {
+    func connectionStateDidChange(internetOn: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+}
+
+
+extension UITableView {
+
+    func setEmptyMessage(_ message: String) {
+        let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height))
+        messageLabel.text = message
+        messageLabel.textColor = .black
+        messageLabel.numberOfLines = 0
+        messageLabel.textAlignment = .center
+        messageLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        messageLabel.sizeToFit()
+
+        self.backgroundView = messageLabel
+        self.separatorStyle = .none
+    }
+}
+

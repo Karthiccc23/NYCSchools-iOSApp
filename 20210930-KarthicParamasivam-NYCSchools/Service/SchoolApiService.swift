@@ -9,9 +9,17 @@ import Foundation
 
 protocol SchoolApiServiceProtocol {
     func fetchSchools(completion: @escaping(_ success: Bool,_ schools: [School], _ error: Error?) -> ())
+    func fetchSchoolDetails(schoolId: String, completion: @escaping(_ success: Bool,_ schoolDetails: [SchoolDetails], _ error: Error?) -> () )
 }
 
+struct Constants {
 
+    struct APIDetails {
+        static let APIScheme = "https"
+        static let APIHost = "data.cityofnewyork.us"
+        static let APIPath = "/resource/"
+    }
+}
 
 class SchoolApiService: SchoolApiServiceProtocol{
     
@@ -20,17 +28,12 @@ class SchoolApiService: SchoolApiServiceProtocol{
         return URLSession(configuration: urlSessionConfiguration, delegate: nil, delegateQueue: nil)
     }()
     
-    private var url: URL? {
-        get {
-            return URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json?$limit=5&$offset=0&$order=school_name")
-        }
-    }
-    
     func fetchSchools(completion: @escaping (Bool, [School], Error?) -> ()) {
-        guard let url = url else {
+        guard let url = createURLFromParameters(parameters: ["$limit": "10","$offset":"0","$order":"school_name"], pathparam: "s3k6-pzi2.json") else {
             completion(false,[], apiError(errorId: 401, description: "Invalid Url", errorKind: .invalidUrl))
             return
         }
+        
         let request = URLRequest(url: url)
         sessionManager.dataTask(with: request) { (data, response, error) in
             
@@ -51,6 +54,58 @@ class SchoolApiService: SchoolApiServiceProtocol{
                 completion(true,response, nil)
             }
         }.resume()
+    }
+    
+    func fetchSchoolDetails(schoolId: String, completion: @escaping (Bool, [SchoolDetails], Error?) -> ()) {
+        guard let url = createURLFromParameters(parameters: ["dbn": schoolId], pathparam: "f9bf-2cp4.json") else {
+            completion(false,[], apiError(errorId: 401, description: "Invalid Url", errorKind: .invalidUrl))
+            return
+        }
+        
+        
+        let request = URLRequest(url: url)
+        sessionManager.dataTask(with: request) { (data, response, error) in
+            
+            //Handle error case
+            guard error == nil else {
+                completion(false,[], apiError(errorId: 501, description: error?.localizedDescription,errorKind: .serverError))
+                return
+            }
+            
+            guard let data = data else {
+                completion(true,[], nil)
+                return
+            }
+            
+            let response = try? JSONDecoder().decode([SchoolDetails].self, from: data)
+            
+            if let response = response {
+                completion(true,response, nil)
+            }
+        }.resume()
+    }
+}
+
+
+extension SchoolApiService {
+    private func createURLFromParameters(parameters: [String:Any], pathparam: String?) -> URL? {
+
+        var components = URLComponents()
+        components.scheme = Constants.APIDetails.APIScheme
+        components.host   = Constants.APIDetails.APIHost
+        components.path   = Constants.APIDetails.APIPath
+        if let paramPath = pathparam {
+            components.path = Constants.APIDetails.APIPath + "\(paramPath)"
+        }
+        if !parameters.isEmpty {
+            components.queryItems = [URLQueryItem]()
+            for (key, value) in parameters {
+                let queryItem = URLQueryItem(name: key, value: "\(value)")
+                components.queryItems!.append(queryItem)
+            }
+        }
+
+        return components.url
     }
 }
 

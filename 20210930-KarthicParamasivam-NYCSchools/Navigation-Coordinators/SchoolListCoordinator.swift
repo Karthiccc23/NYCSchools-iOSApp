@@ -24,7 +24,7 @@ final class SchoolListCoordinator: Coordinator {
         navigationController.setViewControllers([schoolListViewController], animated: false)
     }
     
-    func showSchoolDetails(for school: String) {
+    func showSchoolDetails(for school: School) {
         let schoolDetailsCoordinator = SchoolDetailsCoordinator(navigationController: navigationController, school: school)
         childCoordinators.append(schoolDetailsCoordinator)
         schoolDetailsCoordinator.start()
